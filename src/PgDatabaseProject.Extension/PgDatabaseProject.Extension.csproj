@@ -1,0 +1,134 @@
+<Project>
+  <!-- Explicit SDK imports so VsSDK.targets can be imported AFTER SDK targets -->
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <ImplicitUsings>false</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>PgDatabaseProject.Extension</RootNamespace>
+    <AssemblyName>PgDatabaseProject.Extension</AssemblyName>
+
+    <!-- VSIX settings -->
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
+    <UseCodebase>true</UseCodebase>
+    <CreateVsixContainer>true</CreateVsixContainer>
+    <DeployExtension Condition="'$(MSBuildRuntimeType)' != 'Core'">true</DeployExtension>
+    <DeployExtension Condition="'$(MSBuildRuntimeType)' == 'Core'">false</DeployExtension>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
+    <CopyVsixManifestToOutput>true</CopyVsixManifestToOutput>
+
+    <!-- WPF support for Import Wizard dialog -->
+    <UseWPF>true</UseWPF>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+
+    <!-- Start VS experimental instance for debugging -->
+    <StartAction>Program</StartAction>
+    <StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
+    <StartArguments>/rootsuffix Exp</StartArguments>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Sdk" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" IncludeAssets="compile" />
+    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" IncludeAssets="compile" />
+  </ItemGroup>
+
+  <!-- WPF XAML pages -->
+  <ItemGroup>
+    <Page Include="Dialogs\ImportWizardDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Update="Dialogs\ImportWizardDialog.xaml.cs">
+      <DependentUpon>ImportWizardDialog.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PgDatabaseProject.Core\PgDatabaseProject.Core.csproj" />
+    <ProjectReference Include="..\PgDatabaseProject.SchemaExtractor\PgDatabaseProject.SchemaExtractor.csproj" />
+  </ItemGroup>
+
+  <!-- Include VSCT command table -->
+  <ItemGroup>
+    <VSCTCompile Include="PgDatabasePackage.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+  </ItemGroup>
+
+  <!-- Include custom pkgdef for .pgproj registration -->
+  <ItemGroup>
+    <Content Include="PgDatabaseProject.pkgdef">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- Embed BuildSystem files in VSIX -->
+  <ItemGroup>
+    <Content Include="BuildSystem\**\*">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- Exclude template source from default handling -->
+  <ItemGroup>
+    <None Remove="ProjectTemplate\**\*" />
+    <Content Remove="ProjectTemplate\**\*" />
+  </ItemGroup>
+
+  <!-- Create template zip manually since VSSDK GetVSTemplateItems doesn't handle .pgproj -->
+  <Target Name="CreateTemplateZip" BeforeTargets="GetVsixSourceItems" DependsOnTargets="Compile">
+    <PropertyGroup>
+      <_TemplateZipDir>$(IntermediateOutputPath)ProjectTemplates\CSharp\PostgreSQL\1033\</_TemplateZipDir>
+      <_TemplateZipPath>$(_TemplateZipDir)PostgreSQLDatabase.zip</_TemplateZipPath>
+      <_TemplateOutputDir>$(OutputPath)ProjectTemplates\CSharp\PostgreSQL\1033\</_TemplateOutputDir>
+    </PropertyGroup>
+    <MakeDir Directories="$(_TemplateZipDir)" />
+    <MakeDir Directories="$(_TemplateOutputDir)" />
+    <Delete Files="$(_TemplateZipPath)" Condition="Exists('$(_TemplateZipPath)')" />
+    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\ProjectTemplate"
+                  DestinationFile="$(_TemplateZipPath)" />
+    <Copy SourceFiles="$(_TemplateZipPath)" DestinationFolder="$(_TemplateOutputDir)" />
+    <!-- Add to VSIX source items so it gets packaged -->
+    <ItemGroup>
+      <VSIXSourceItem Include="$(_TemplateOutputDir)PostgreSQLDatabase.zip">
+        <VSIXSubPath>ProjectTemplates\CSharp\PostgreSQL\1033\</VSIXSubPath>
+      </VSIXSourceItem>
+    </ItemGroup>
+    <Message Importance="High" Text="Created template zip: $(_TemplateOutputDir)PostgreSQLDatabase.zip" />
+  </Target>
+
+  <!-- Include TextMate grammar for PostgreSQL SQL -->
+  <ItemGroup>
+    <Content Include="Grammars\**\*">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- Include XAML rules -->
+  <ItemGroup>
+    <Content Include="Rules\**\*.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+
+  <!-- SDK targets first, then VsSDK targets (order matters for PrepareForRunDependsOn) -->
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Import Project="$(VsSDKInstall)\Microsoft.VsSDK.targets" />
+</Project>

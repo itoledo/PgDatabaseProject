@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="PgDatabaseProject.SchemaExtractor.Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="PolySharp" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PgDatabaseProject.Core\PgDatabaseProject.Core.csproj" />
+  </ItemGroup>
+</Project>

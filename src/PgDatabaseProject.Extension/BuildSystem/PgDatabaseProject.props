@@ -1,0 +1,45 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    Default properties for PostgreSQL Database Projects (.pgproj).
+    These are imported automatically by the project file via the SDK.
+  -->
+  <PropertyGroup>
+    <PgDefaultSchema Condition="'$(PgDefaultSchema)' == ''">public</PgDefaultSchema>
+    <PgTargetVersion Condition="'$(PgTargetVersion)' == ''">16</PgTargetVersion>
+
+    <!-- Suppress .NET build output - this is a schema-only project -->
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <!-- CPS project capability for icon and feature detection -->
+  <ItemGroup>
+    <ProjectCapability Include="PostgreSQLDatabaseProject" />
+  </ItemGroup>
+
+  <!-- Define SQL script item type -->
+  <ItemGroup>
+    <AvailableItemName Include="SqlScript" />
+  </ItemGroup>
+
+  <!-- Include all .sql files as SqlScript items by default -->
+  <ItemGroup>
+    <SqlScript Include="Schemas\**\*.pgsql" Condition="Exists('Schemas')" />
+    <SqlScript Include="Tables\**\*.pgsql" Condition="Exists('Tables')" />
+    <SqlScript Include="Views\**\*.pgsql" Condition="Exists('Views')" />
+    <SqlScript Include="Functions\**\*.pgsql" Condition="Exists('Functions')" />
+    <SqlScript Include="StoredProcedures\**\*.pgsql" Condition="Exists('StoredProcedures')" />
+    <SqlScript Include="Sequences\**\*.pgsql" Condition="Exists('Sequences')" />
+    <SqlScript Include="Types\**\*.pgsql" Condition="Exists('Types')" />
+    <SqlScript Include="Triggers\**\*.pgsql" Condition="Exists('Triggers')" />
+    <SqlScript Include="Extensions\**\*.pgsql" Condition="Exists('Extensions')" />
+    <SqlScript Include="Indexes\**\*.pgsql" Condition="Exists('Indexes')" />
+  </ItemGroup>
+
+  <!-- Make SqlScript items visible in Solution Explorer as None items -->
+  <ItemGroup>
+    <None Include="@(SqlScript)" />
+  </ItemGroup>
+</Project>

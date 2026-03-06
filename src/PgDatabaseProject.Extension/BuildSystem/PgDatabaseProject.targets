@@ -1,0 +1,19 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    Build targets for PostgreSQL Database Projects (.pgproj).
+    The default Build target lists all PostgreSQL scripts.
+    Future: add SQL syntax validation, dependency ordering, deployment script generation.
+  -->
+
+  <Target Name="ListSqlScripts" BeforeTargets="Build">
+    <Message Importance="normal" Text="PostgreSQL Database Project: $(MSBuildProjectName)" />
+    <Message Importance="normal" Text="  Default Schema: $(PgDefaultSchema)" />
+    <Message Importance="normal" Text="  Target Version: PostgreSQL $(PgTargetVersion)" />
+    <Message Importance="low" Text="  SQL Script: %(SqlScript.Identity)" />
+  </Target>
+
+  <Target Name="ValidateProject" BeforeTargets="Build">
+    <Warning Text="No PostgreSQL scripts found in project. Use 'Import PostgreSQL Database...' to import schemas."
+             Condition="'@(SqlScript)' == ''" />
+  </Target>
+</Project>

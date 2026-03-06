@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  XAML Rule for PostgreSQL Database Project properties.
+  Shown in the VS Properties window when the project node is selected.
+-->
+<Rule Name="PgProject"
+      DisplayName="PostgreSQL Database"
+      PageTemplate="generic"
+      Description="PostgreSQL Database Project Properties"
+      xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
+  </Rule.DataSource>
+
+  <StringProperty Name="PgDefaultSchema"
+                  DisplayName="Default Schema"
+                  Description="The default schema for new database objects."
+                  Default="public" />
+
+  <StringProperty Name="PgTargetVersion"
+                  DisplayName="Target PostgreSQL Version"
+                  Description="The target PostgreSQL server version (e.g., 14, 15, 16)."
+                  Default="16" />
+</Rule>

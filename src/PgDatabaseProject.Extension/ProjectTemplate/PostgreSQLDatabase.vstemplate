@@ -1,0 +1,25 @@
+<VSTemplate Version="3.0.0" Type="Project"
+    xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>PostgreSQL Database Project</Name>
+    <Description>A project for managing PostgreSQL database schemas with SQL scripts organized by object type. Supports importing DDL from existing databases.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>9000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>PostgreSQLDatabase</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <CreateInPlace>true</CreateInPlace>
+    <LanguageTag>SQL</LanguageTag>
+    <PlatformTag>linux</PlatformTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>database</ProjectTypeTag>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="Template.csproj" ReplaceParameters="false">
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PgDatabaseProject.Extension, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>PgDatabaseProject.Extension.PgProjectTemplateWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

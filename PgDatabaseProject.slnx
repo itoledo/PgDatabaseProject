@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PgDatabaseProject.Core/PgDatabaseProject.Core.csproj" />
+    <Project Path="src/PgDatabaseProject.Extension/PgDatabaseProject.Extension.csproj" />
+    <Project Path="src/PgDatabaseProject.SchemaExtractor/PgDatabaseProject.SchemaExtractor.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PgDatabaseProject.SchemaExtractor.Tests/PgDatabaseProject.SchemaExtractor.Tests.csproj" />
+  </Folder>
+</Solution>

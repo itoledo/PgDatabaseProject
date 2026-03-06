@@ -1,0 +1,8 @@
+// Register .pgproj extension with the CPS SDK-style project factory
+// GUID {9A19103F-16F7-4668-BE54-9A1E7A4F7556} = SDK-style project (CPS)
+[$RootKey$\Projects\{9A19103F-16F7-4668-BE54-9A1E7A4F7556}\FileExtensions\.pgproj]
+"DefaultBuildAction"="None"
+
+// Map .pgproj to CPS project factory so AddFromFile/OpenProject can resolve it
+[$RootKey$\Projects\{9A19103F-16F7-4668-BE54-9A1E7A4F7556}\Extensions\pgproj]
+@=""
