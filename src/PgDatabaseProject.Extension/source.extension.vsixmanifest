@@ -3,16 +3,24 @@
                  xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="PgDatabaseProject.Extension.a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    <Identity Id="PgDatabaseProject.Extension.D7A7FCF6-EB65-466D-9C7B-9F4B75A237F3"
               Version="1.0.0"
               Language="en-US"
-              Publisher="PostgreSQL Database Project" />
+              Publisher="birdie" />
     <DisplayName>PostgreSQL Database Project</DisplayName>
     <Description>Provides a project type for managing PostgreSQL database schemas with SQL scripts. Supports importing DDL from existing PostgreSQL databases.</Description>
+    <License>LICENSE.txt</License>
+    <Icon>icon.png</Icon>
     <Tags>PostgreSQL, Database, SQL, DDL, Schema</Tags>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 19.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[17.0, 19.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="[17.0, 19.0)">
       <ProductArchitecture>amd64</ProductArchitecture>
     </InstallationTarget>
   </Installation>
