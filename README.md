@@ -8,8 +8,9 @@ It allows you to manage your database schema as code. Useful for version control
 
 - Allows importing an existing PostgreSQL database schema into a project. It creates a .sql file for each database object (tables, views, functions, etc.) in the project.
 - Syntax coloring.
-
+- Running scripts from VS to update the database.
+ 
 ## Planned features
 
-- Running scripts from VS to update the database.
+- Grid view for results.
 - Schema comparison between the project and a live database.

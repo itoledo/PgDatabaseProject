@@ -1,0 +1,13 @@
+<VSTemplate Version="3.0.0" Type="Item"
+    xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>PostgreSQL Script</Name>
+    <Description>An empty PostgreSQL SQL script file (.pgsql)</Description>
+    <ProjectType>CSharp</ProjectType>
+    <DefaultName>Script</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem TargetFileName="$fileinputname$.pgsql">Script.pgsql</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

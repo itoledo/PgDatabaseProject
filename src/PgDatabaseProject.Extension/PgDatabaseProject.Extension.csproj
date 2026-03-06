@@ -48,6 +48,13 @@
     <Compile Update="Dialogs\ImportWizardDialog.xaml.cs">
       <DependentUpon>ImportWizardDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="Dialogs\ConnectDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Update="Dialogs\ConnectDialog.xaml.cs">
+      <DependentUpon>ConnectDialog.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -78,10 +85,12 @@
     </Content>
   </ItemGroup>
 
-  <!-- Exclude template source from default handling -->
+  <!-- Exclude template sources from default handling -->
   <ItemGroup>
     <None Remove="ProjectTemplate\**\*" />
     <Content Remove="ProjectTemplate\**\*" />
+    <None Remove="ItemTemplate\**\*" />
+    <Content Remove="ItemTemplate\**\*" />
   </ItemGroup>
 
   <!-- Create template zip manually since VSSDK GetVSTemplateItems doesn't handle .pgproj -->
@@ -104,6 +113,27 @@
       </VSIXSourceItem>
     </ItemGroup>
     <Message Importance="High" Text="Created template zip: $(_TemplateOutputDir)PostgreSQLDatabase.zip" />
+  </Target>
+
+  <!-- Create item template zip -->
+  <Target Name="CreateItemTemplateZip" BeforeTargets="GetVsixSourceItems" DependsOnTargets="Compile">
+    <PropertyGroup>
+      <_ItemTemplateZipDir>$(IntermediateOutputPath)ItemTemplates\CSharp\PostgreSQL\1033\</_ItemTemplateZipDir>
+      <_ItemTemplateZipPath>$(_ItemTemplateZipDir)PostgreSQLScript.zip</_ItemTemplateZipPath>
+      <_ItemTemplateOutputDir>$(OutputPath)ItemTemplates\CSharp\PostgreSQL\1033\</_ItemTemplateOutputDir>
+    </PropertyGroup>
+    <MakeDir Directories="$(_ItemTemplateZipDir)" />
+    <MakeDir Directories="$(_ItemTemplateOutputDir)" />
+    <Delete Files="$(_ItemTemplateZipPath)" Condition="Exists('$(_ItemTemplateZipPath)')" />
+    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\ItemTemplate"
+                  DestinationFile="$(_ItemTemplateZipPath)" />
+    <Copy SourceFiles="$(_ItemTemplateZipPath)" DestinationFolder="$(_ItemTemplateOutputDir)" />
+    <ItemGroup>
+      <VSIXSourceItem Include="$(_ItemTemplateOutputDir)PostgreSQLScript.zip">
+        <VSIXSubPath>ItemTemplates\CSharp\PostgreSQL\1033\</VSIXSubPath>
+      </VSIXSourceItem>
+    </ItemGroup>
+    <Message Importance="High" Text="Created item template zip: $(_ItemTemplateOutputDir)PostgreSQLScript.zip" />
   </Target>
 
   <!-- Include TextMate grammar for PostgreSQL SQL -->

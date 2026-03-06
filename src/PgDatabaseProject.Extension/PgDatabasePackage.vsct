@@ -4,31 +4,75 @@
 
   <Extern href="stdidcmd.h" />
   <Extern href="vsshlids.h" />
+  <Include href="KnownImageIds.vsct"/>
 
   <Commands package="guidPgDatabasePackage">
+    <Menus>
+      <Menu guid="guidPgCmdSet" id="PgSqlToolbar" type="Toolbar" priority="0x0000">
+        <Strings>
+          <ButtonText>PostgreSQL</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
     <Groups>
+      <!-- Project context menu group -->
       <Group guid="guidPgCmdSet" id="PgMenuGroup" priority="0x0600">
-        <!-- Attach to the project context menu -->
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+      </Group>
+      <!-- Toolbar group -->
+      <Group guid="guidPgCmdSet" id="PgToolbarGroup" priority="0x0000">
+        <Parent guid="guidPgCmdSet" id="PgSqlToolbar" />
       </Group>
     </Groups>
 
     <Buttons>
-      <!-- Import Database command - will be implemented in Phase 3 -->
+      <!-- Import Database - project context menu -->
       <Button guid="guidPgCmdSet" id="cmdImportDatabase" priority="0x0100" type="Button">
         <Parent guid="guidPgCmdSet" id="PgMenuGroup" />
         <Strings>
           <ButtonText>Import PostgreSQL Database...</ButtonText>
         </Strings>
       </Button>
+
+      <!-- Connect to PostgreSQL - toolbar -->
+      <Button guid="guidPgCmdSet" id="cmdConnectDatabase" priority="0x0100" type="Button">
+        <Parent guid="guidPgCmdSet" id="PgToolbarGroup" />
+        <Icon guid="ImageCatalogGuid" id="ConnectToDatabase" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>Connect to PostgreSQL</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Execute Script - toolbar -->
+      <Button guid="guidPgCmdSet" id="cmdExecuteScript" priority="0x0200" type="Button">
+        <Parent guid="guidPgCmdSet" id="PgToolbarGroup" />
+        <Icon guid="ImageCatalogGuid" id="Run" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <Strings>
+          <ButtonText>Execute Script</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
   </Commands>
 
+  <VisibilityConstraints>
+    <VisibilityItem guid="guidPgCmdSet" id="PgSqlToolbar" context="guidPgsqlUIContext"/>
+  </VisibilityConstraints>
+
   <Symbols>
     <GuidSymbol name="guidPgDatabasePackage" value="{d4e85a01-7b5c-4f2a-9c1d-3e6f8a0b2c4d}" />
+    <GuidSymbol name="guidPgsqlUIContext" value="{c8d9e0f1-a2b3-4567-8901-23456789abcd}" />
     <GuidSymbol name="guidPgCmdSet" value="{f2a1b3c4-d5e6-7890-abcd-123456789abc}">
+      <IDSymbol name="PgSqlToolbar" value="0x1000" />
       <IDSymbol name="PgMenuGroup" value="0x1020" />
+      <IDSymbol name="PgToolbarGroup" value="0x1030" />
       <IDSymbol name="cmdImportDatabase" value="0x0100" />
+      <IDSymbol name="cmdConnectDatabase" value="0x0200" />
+      <IDSymbol name="cmdExecuteScript" value="0x0300" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>
